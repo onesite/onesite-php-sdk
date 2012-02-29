@@ -56,8 +56,11 @@ class onesite_sdk_dao_user extends onesite_sdk_dao
 		$local = array();
 		
 		foreach ($this->_public_fields as $key => $val) {
-			$local[$val] = $data[$val];
-			unset($data[$val]);
+			
+			if (array_key_exists($val, $data)) {
+				$local[$val] = $data[$val];
+				unset($data[$val]);
+			}
 		}
 		
 		parent::loadProperties($local);
@@ -91,7 +94,6 @@ class onesite_sdk_dao_user extends onesite_sdk_dao
 		}
 		
 		$this->_properties['tiers'] = $tier_list;
-		return $tier_list;
-		
+		return $tier_list;		
 	}	
 }

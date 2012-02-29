@@ -27,7 +27,6 @@
  * $user = $userApi->getDetails(12345);
  *
  * @author  Mike Benshoof <mbenshoof@onesite.com>
- * @link     http://developer.onesite.com/XXXX
  */
 class onesite_sdk_api_userApi extends onesite_sdk_api
 {

@@ -27,7 +27,6 @@
  * $user_id = $session->check("session_id", "session_sec");
  *
  * @author  Mike Benshoof <mbenshoof@onesite.com>
- * @link    http://developer.onesite.com/XXXX
  */
 class onesite_sdk_api_sessionApi extends onesite_sdk_api
 {
@@ -43,13 +42,10 @@ class onesite_sdk_api_sessionApi extends onesite_sdk_api
 	 * valid a populated User object is returned otherwise
 	 * an anonymous User object.
 	 *
-	 * @param onesite_sdk_dao_session $session The current Session
-	 * @param string                  $ip      The remote client's IP (optional)
-	 * @param string                  $agent   The remote user agent (optional)
+	 * @param onesite_sdk_dao_session $session
 	 *
-	 * @return onesite_sdk_dao_session
+	 * @return boolean
 	 */
-	//public function check($session, $ip = null, $agent = null)
 	public function check(&$session)
 	{
 		// Get the client IP if none is passed.
@@ -86,9 +82,7 @@ class onesite_sdk_api_sessionApi extends onesite_sdk_api
 				$session->user = $user;
 			}
 			
-			//return $session;
-			return true;
-			
+			return true;			
 		} catch (onesite_exception $e) {
 			$this->_logException(
 					"session.check",
@@ -104,41 +98,14 @@ class onesite_sdk_api_sessionApi extends onesite_sdk_api
 	 * Creates a new session. If the User object is null or not populated with
 	 * a id, username or email then an Anonymous session will be created. 
 	 *
-	 * @param onesite_sdk_dao_user $user         User object to create session for
-	 * @param string               $ip           The user's IP address
-	 * @param string               $agent        The user's browser agent
-	 * @param integer              $expires      Seconds until session expires
-	 * @param string               $session_data Any optional session data
+	 * @param onesite_sdk_dao_session $session
 	 *
-	 * @return onesite_sdk_dao_session
+	 * @return void
 	 */
-	public function create($user, $ip = null, $agent = null, $expires = null, $session_data = null)
-	{		
-		// Get the client IP if none is passed.
-		if (is_null($ip)) {
-			$ip = $_SERVER['REMOTE_ADDR'];
-		}
-		
-		// Use the local agent if none is passed.
-		if (is_null($agent)) {
-			$agent = $_SERVER['HTTP_USER_AGENT'];
-		}
-		
-		// Set the expiration date as 24 hours if none passed.
-		if (is_null($expires)) {
-			$expires = self::EXPIRES;
-		}
-		
-		// Set the session data as empty string if none passed.
-		if (is_null($session_data)) {
-			$session_data = "";
-		}
-		
-		// We have to have a valid user agent.
-		if ($agent == "") {
-			return false;
-		}		
-		
+	public function create(&$session)
+	{
+		//TODO: Implement this service call.
+		return false;		
 	}
 	
 	/**
@@ -154,20 +121,8 @@ class onesite_sdk_api_sessionApi extends onesite_sdk_api
 	 */
 	public function createCrossDomain($user, $callback_url, $ip = null, $expires = null)
 	{
-		// Get the client IP if none is passed.
-		if (is_null($ip)) {
-			$ip = $_SERVER['REMOTE_ADDR'];
-		}
-		
-		// Use the local agent if none is passed.
-		if (is_null($agent)) {
-			$agent = $_SERVER['HTTP_USER_AGENT'];
-		}
-		
-		// Set the expiration date as 24 hours if none passed.
-		if (is_null($expires)) {
-			$expires = self::EXPIRES;
-		}		
+		//TODO: Implement this service call.
+		return false;	
 	}
 
 	/**
@@ -236,10 +191,8 @@ class onesite_sdk_api_sessionApi extends onesite_sdk_api
 	 */
 	public function login($user, $password, $expires = null)
 	{
-		// Set the expiration date as 24 hours if none passed.
-		if (is_null($expires)) {
-			$expires = self::EXPIRES;
-		}			
+		//TODO: Implement this service call.
+		return false;	
 	}
 
 	/**
@@ -256,21 +209,14 @@ class onesite_sdk_api_sessionApi extends onesite_sdk_api
 	 */
 	public function loginCrossDomain($user, $password, $callback_url, $ip = null, $expires = null)
 	{
-		// Get the client IP if none is passed.
-		if (is_null($ip)) {
-			$ip = $_SERVER['REMOTE_ADDR'];
-		}
-		
-		// Set the expiration date as 24 hours if none passed.
-		if (is_null($expires)) {
-			$expires = self::EXPIRES;
-		}		
+		//TODO: Implement this service call.
+		return false;
 	}
 
 	/**
-	 *  Logout a given user.
+	 * Logout a given user.
 	 *
-	 * @param onesite_sdk_dao_session $user
+	 * @param onesite_sdk_dao_session $session
 	 *
 	 * @return boolean
 	 */
@@ -281,13 +227,13 @@ class onesite_sdk_api_sessionApi extends onesite_sdk_api
 			$params = array();
 			
 			// Cascade through the most optimal variables.
-			if ($user->id > 0) {
+			if ($session->user->id > 0) {
 				$params['user_id'] = $session->user->id;
-			} else if ($user->username !== "") {
+			} else if ($session->user->username !== "") {
 				$params['username'] = $session->user->username;
-			} else if ($user->email !== "") {
+			} else if ($session->user->email !== "") {
 				$params['email'] = $session->user->email;
-			} else if ($user->session->coreU !== "") {
+			} else if ($session->coreU !== "") {
 				$params['core_u'] = $session->coreU;
 			} else {
 				throw new onesite_exception(

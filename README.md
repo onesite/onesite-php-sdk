@@ -14,19 +14,19 @@ This is intended to show a quick sample of how one would get started with the SD
 
 1. Include the main SDK entry point.  When interacting with SDK, only the **src/com/onesite** directory is needed.  For this example, we'll assume have loaded that directory in **/var/www/libs/onesite**.
 
-	<pre lang="php"><code>  
+	<pre lang="php"><code>
 	require_once("/var/www/libs/onesite/sdk.php");
 	</code></pre>
 
 2. Create a new instance of the SDK your development key.  For this example, we'll use "abc123" as your devkey.
 
-	<pre lang="php"><code>  
+	<pre lang="php"><code>
 	$sdk = new onesite_sdk("abc123");
 	</code></pre>
 
 3. Load the session and user APIs
 
-	<pre lang="php"><code>  
+	<pre lang="php"><code>
 	$userApi = $sdk->getUserApi();
 	$sessionApi = $sdk->getSessionApi();
 	</code></pre>
