@@ -69,19 +69,7 @@ class onesite_sdk_api_sessionApi extends onesite_sdk_api
 		
 		try {
 			$resp = $this->_client->callRest($path, $params);
-			$session->loadProperties($resp);
-
-			// Temporary wrapper until service returns minimal user details.			
-			if ($resp['user_id'] > 0) {
-				$user = new onesite_sdk_dao_user();
-				$user->id = $resp['user_id'];
-				
-				$userApi = new onesite_sdk_api_userApi($this->getClient());
-				$userApi->getDetails($user);
-				
-				$session->user = $user;
-			}
-			
+			$session->loadProperties($resp['session']);
 			return true;			
 		} catch (onesite_exception $e) {
 			$this->_logException(
@@ -105,7 +93,7 @@ class onesite_sdk_api_sessionApi extends onesite_sdk_api
 	public function create(&$session)
 	{
 		//TODO: Implement this service call.
-		return false;		
+		return false;	
 	}
 	
 	/**
@@ -154,10 +142,10 @@ class onesite_sdk_api_sessionApi extends onesite_sdk_api
 		}
 		
 		$params = array(
-			'domain'     => $domain,
-			'client_ip'  => $ip,
-			'agent'      => $agent,
-			'origin_url' => $callback,		
+			'domain'       => $domain,
+			'client_ip'    => $ip,
+			'agent'        => $agent,
+			'callback_url' => $callback,		
 		);
 		
 		$path = "1/session/joinCrossDomain.json";
@@ -166,7 +154,7 @@ class onesite_sdk_api_sessionApi extends onesite_sdk_api
 			$response = $this->_client->callRest($path, $params);
 						
 			if (array_key_exists("redirect_url", $response)) {
-				return $response['redirect_url'] . "&nocrypt=1";
+				return $response['redirect_url'] . "&nocrypt=1&allow_redir=1";
 			}
 			
 		} catch (onesite_exception $e) {

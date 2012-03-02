@@ -239,7 +239,11 @@ class onesite_sdk_client
 	protected function _parseLegacyRestResponse($response)
 	{
 		//$response = $response[$action];
-				
+		
+		if (!isset($response['code'])) {
+			$response['code'] = 0;
+		}
+		
 		if (1 != $response['code']) {
 			throw new onesite_exception(
 				"Service error: " . $response['message'],

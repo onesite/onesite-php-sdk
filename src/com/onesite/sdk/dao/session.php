@@ -31,17 +31,35 @@ class onesite_sdk_dao_session extends onesite_sdk_dao
 	{
 		// The public field mapping to the local properties.
 		$this->_public_fields = array(
-			'coreU'   => 'core_u',
-			'coreX'   => 'core_x',
-			'ip'      => 'remote_ip',
-			'agent'   => 'agent',
-			'expires' => 'session_expires',
-			'data'    => 'session_data',
-			'state'   => 'session_state_string',
-			'user'    => 'user',
+			'coreU'   => 'CoreU',
+			'coreX'   => 'CoreX',
+			'ip'      => 'RemoteIP',
+			'agent'   => 'Agent',
+			'expires' => 'expires',
+			'state'   => 'State',
+			'user'    => 'User',
 		);
+
+		$this->_properties['User'] = null;
+	}
+
+	/**
+	 * Modify the raw data to create both the user object and the 
+	 * profile object.
+	 *
+	 * @return void.
+	 */
+	public function loadProperties($data)
+	{
+		parent::loadProperties($data);
 		
-		$this->_properties['user'] = null;
+		if (array_key_exists("User", $data) && is_array($data['User'])) {
+			
+			require_once(dirname(__FILE__) . "/user.php");
+			$user = new onesite_sdk_dao_user();
+			$user->loadProperties($data['User']);
+			$this->user = $user;
+		}
 	}
 	
 	/**

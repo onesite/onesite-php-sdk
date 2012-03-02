@@ -31,12 +31,10 @@ class onesite_sdk_dao_user extends onesite_sdk_dao
 	{
 		// The public field mapping to the local properties.
 		$this->_public_fields = array(
-			'id'       => 'user_id',
-			'username' => 'username',
-			'email'    => 'email',
-			'domain'   => 'domain',
-			'nodeID'   => 'node_id',
-			'subdir'   => 'subdir',
+			'id'       => 'UserID',
+			'username' => 'Username',
+			'email'    => 'Email',
+			'name'     => 'Name',
 			'profile'  => 'profile',
 		);
 	}
@@ -65,35 +63,12 @@ class onesite_sdk_dao_user extends onesite_sdk_dao
 		
 		parent::loadProperties($local);
 		
-		require_once(dirname(__FILE__) . "/profile.php");
-		$profile = new onesite_sdk_dao_profile($data);
-		$this->profile = $profile;
+		if (count($data) > 0) {
+			require_once(dirname(__FILE__) . "/profile.php");
+			$profile = new onesite_sdk_dao_profile($data);
+			$this->profile = $profile;
+		} else {
+			$this->profile = null;
+		}
 	}
-	
-	/**
-	 * Return the tiers that this user is currently a member of.
-	 *
-	 * @return array
-	 */
-	public function getTiers()
-	{
-		// Already parsed the tiers, so send them back.
-		if (array_key_exists("tiers", $this->_properties)) {
-			return $this->_properties['tiers'];
-		}
-		
-		$tier_list = array();
-		
-		foreach ($this->_properties['tier_ids'] as $node_id => $tiers) {
-			
-			$tier_list[$node_id] = array();
-			
-			foreach ($tiers as $id => $data) {
-				$tier_list[$node_id][$id] = $data['name'];
-			}
-		}
-		
-		$this->_properties['tiers'] = $tier_list;
-		return $tier_list;		
-	}	
 }

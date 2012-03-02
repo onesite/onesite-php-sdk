@@ -269,6 +269,16 @@ class onesite_sdk_api_userApi extends onesite_sdk_api
 	 */
 	public function getExternalProperty($user, &$prop)
 	{		
+		// Make sure we have a valid user and property
+		if (!($prop instanceof onesite_sdk_dao_externalProperty)) {
+			return;
+		}
+
+		if (!($user instanceof onesite_sdk_dao_user)) {
+			$prop->value = null;
+			return;
+		}
+		
 		$params = array(
 			'action'  => "getProperty",
 			'userID' => $user->id,
